@@ -1,0 +1,5 @@
+{
+    "require": {
+        "aaronholbrook/autoload": "^1.2"
+    }
+}
