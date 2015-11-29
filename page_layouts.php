@@ -35,11 +35,22 @@
  * https://github.com/10up/grunt-wp-plugin
  */
 
+namespace WPLAYOUTS;
 // Useful global constants
 define( 'WPLAYOUTS_VERSION', '0.1.0' );
 define( 'WPLAYOUTS_URL',     plugin_dir_url( __FILE__ ) );
 define( 'WPLAYOUTS_PATH',    dirname( __FILE__ ) . '/' );
 
+// Include composer files in the Vendor directory.
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require( __DIR__ . '/vendor/autoload.php' );
+}
+
+//Setup autoloader to dynamically load all files in the plugin's includes folder.
+if ( function_exists( '\AaronHolbrook\Autoload\autoload' ) ) {
+	// Include files
+	\AaronHolbrook\Autoload\autoload( __DIR__ . '/includes' );
+}
 /**
  * Default initialization for the plugin:
  * - Registers the default textdomain.
@@ -59,7 +70,7 @@ function wplayouts_activate() {
 
 	flush_rewrite_rules();
 }
-register_activation_hook( __FILE__, 'wplayouts_activate' );
+register_activation_hook( __FILE__, __NAMESPACE__ . '\wplayouts_activate' );
 
 /**
  * Deactivate the plugin
@@ -71,8 +82,10 @@ function wplayouts_deactivate() {
 register_deactivation_hook( __FILE__, 'wplayouts_deactivate' );
 
 // Wireup actions
-add_action( 'init', 'wplayouts_init' );
-\AaronHolbrook\Autoload\autoload( __DIR__ . 'includes' );
+add_action( 'init', __NAMESPACE__ . '\wplayouts_init' );
+\WPLAYOUTS\Metaboxes\setup();
+\WPLAYOUTS\scripts\setup();
+\WPLAYOUTS\Templates\setup();
 // Wireup filters
 
 // Wireup shortcodes
