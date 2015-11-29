@@ -66,6 +66,7 @@ module.exports = function( grunt ) {
 		sass:   {
 			all: {
 				files: {
+					'assets/css/page_layouts-admin.css': 'assets/css/sass/page_layouts-admin.scss',
 					'assets/css/page_layouts.css': 'assets/css/sass/page_layouts.scss'
 				}
 			}
@@ -85,6 +86,13 @@ module.exports = function( grunt ) {
 				cwd: 'assets/css/',				
 				src: ['page_layouts.css'],
 				
+				dest: 'assets/css/',
+				ext: '.min.css'
+			},
+			admin: {
+				cwd: 'assets/css/',
+				src: ['page_layouts-admin.css'],
+
 				dest: 'assets/css/',
 				ext: '.min.css'
 			}
