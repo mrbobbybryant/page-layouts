@@ -1,16 +1,26 @@
 <?php
 /**
- * Simple Google Maps
- * This class provides must of the core plugin functionality.
+ * Page Layouts
+ * This class makes creating metaboxes faster and easier.
  *
  * @package Simple Google Maps
  * @since 0.1.0
  */
 
-namespace SIMPLE_GOOGLE_MAPS\Metaboxes;
-use SIMPLE_GOOGLE_MAPS\Country_Select as Select;
-use SIMPLE_GOOGLE_MAPS\Helpers as Helpers;
+namespace WPLAYOUTS\Metaboxes;
 
+function setup() {
+	$wp_custom_metaboxes = new Page_layouts_Metabox(
+			'wplayouts',
+			array(
+					array( 'key' => 'layout-1', 'name' => 'Layout One', 'img' => 'Layout_1.png' ),
+					array( 'key' => 'layout-2', 'name' => 'Layout Two', 'img' => 'Layout_2.png' ),
+					array( 'key' => 'layout-3', 'name' => 'Layout Three', 'img' => 'Layout_3.png' )
+			)
+	);
+	$wp_custom_metaboxes->init();
+	$wp_custom_metaboxes->add_custom_metabox( 'select-page-layout', 'Select Page Layout', 'page' );
+}
 class Custom_Metabox {
 
 	/**
@@ -42,7 +52,7 @@ class Custom_Metabox {
 	 */
 	public function init() {
 		add_action( 'add_meta_boxes', array( $this, 'register_custom_metabox' ) );
-		add_action( 'save_post_google_map', array( $this, 'save_custom_metabox_data' ) );
+		add_action( 'save_post_page', array( $this, 'save_custom_metabox_data' ) );
 	}
 
 	/**
@@ -119,45 +129,33 @@ class Custom_Metabox {
 	}
 }
 
-class Google_Map_Metabox extends Custom_metabox {
+class Page_layouts_Metabox extends Custom_metabox {
 
 	/**
 	 * Outputs custom metabox div container
 	 * @param $post
 	 */
 	public function render_custom_metabox( $post ) {
-		wp_nonce_field( SIMPLE_GOOGLE_MAPS_PATH, 'simple_google_map_nonce' );
-		$meta_data = array_map( function( $a ){ return $a[0]; }, get_post_meta( $post->ID ) );
-		?>
-		<div id="google-map-input">
-			<?php
-			foreach( $this->meta_names as $key => $value ) {
+		wp_nonce_field( WPLAYOUTS_PATH, 'page_layout_nonce' );
+		$selection = get_post_meta( $post->ID, 'page_layout_selection', true );
 
-				?>
-				<div class="google-row">
-					<label for="<?php echo str_replace( '_', '-', $key ) ?>"><?php echo $value ?></label>
-					<input type="text" class="map-input" size="40" placeholder="<?php echo $value ?>" name="<?php echo $key ?>" id="<?php echo str_replace( '_', '-', $key ) ?>"
-					       value="<?php if ( ! empty ( $meta_data[$key] ) ) {
-						       echo esc_attr( $meta_data[$key] );
-					       } ?>"/>
-				</div>
-				<?php
-			}
-
-			$country = Helpers\postmeta_value_exists( $meta_data, 'countries' );
-			echo new Select\Country_Select( $country );
-
+		foreach ( $this->meta_names as $name ) {
 			?>
-			<input id="geolat" name="geolat" class="text" type="hidden" Value="<?php if ( ! empty ( $meta_data['geolat'] ) ) {
-				echo esc_attr( $meta_data['geolat'] );
-			} ?>"/>
-			<input id="geolng" name="geolng" class="text" type="hidden" Value="<?php if ( ! empty ( $meta_data['geolng'] ) ) {
-				echo esc_attr( $meta_data['geolng'] );
-			} ?>"/>
-		</div>
+			<label>
+				<input
+						type="radio"
+						name="page_layout_selection"
+						value="<?php echo esc_attr( $name['key'] ); ?>"
+						<?php checked( $selection, $name['key'] ); ?>
+				/>
+				<img src="<?php echo esc_url( WPLAYOUTS_URL . 'images/src/' . $name['img'] ); ?>" class="layout-img" alt="<?php echo esc_attr( $name['name'] ); ?>">
+			</label>
 
-		<div id="map"></div>
-		<?php
+
+			<?php
+		}
+
+
 	}
 
 	public function save_custom_metabox_data( $post_id ) {
@@ -170,39 +168,14 @@ class Google_Map_Metabox extends Custom_metabox {
 			return;
 		}
 
-		$is_valid_nonce = ( isset( $_POST[ 'simple_google_map_nonce' ] ) && wp_verify_nonce( $_POST[ 'simple_google_map_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
+		$is_valid_nonce = ( isset( $_POST[ 'page_layout_nonce' ] ) && wp_verify_nonce( $_POST[ 'page_layout_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
 		if ( ! $is_valid_nonce ) {
 			return;
 		}
 
-		foreach ( $this->meta_names as $key => $value ) {
-			if ( isset( $_POST[ $key ] ) ) {
-				update_post_meta( $post_id, $key, sanitize_text_field( $_POST[ $key ] ) );
-			}
-		}
-
-		if ( isset( $_POST[ 'countries' ] ) ) {
-			update_post_meta( $post_id, 'countries', sanitize_text_field( $_POST[ 'countries' ] ) );
-		}
-
-		if ( isset( $_POST[ 'geolat' ] ) ) {
-			update_post_meta( $post_id, 'geolat', filter_var( $_POST[ 'geolat' ], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) );
-		}
-
-		if ( isset( $_POST[ 'geolng' ] ) ) {
-			update_post_meta( $post_id, 'geolng', filter_var( $_POST[ 'geolng' ], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) );
+		if ( isset( $_POST[ 'page_layout_selection' ] ) ) {
+			update_post_meta( $post_id, 'page_layout_selection', sanitize_text_field( $_POST[ 'page_layout_selection' ] ) );
 		}
 
 	}
 }
-$meta_names = array(
-		'address_1' => 'Address Line 1',
-		'address_2' => 'Address Line 2',
-		'city' => 'City',
-		'state' => 'State/Province/Region',
-		'zipcode' => 'Zip/ Postal Code'
-);
-
-$wp_custom_metaboxes = new Google_Map_Metabox( 'simple-maps', $meta_names );
-$wp_custom_metaboxes->init();
-$wp_custom_metaboxes->add_custom_metabox( 'add-google-map', 'Create Google Map', 'google_map' );
