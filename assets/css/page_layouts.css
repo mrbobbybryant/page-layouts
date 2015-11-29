@@ -1,0 +1,25 @@
+.layout-1 .hero-section img {
+  height: 300px; }
+.layout-1 .featured-excerpt {
+  width: 48%;
+  float: left;
+  margin: 0 0 1em .5em;
+  height: 350px;
+  padding: 1em;
+  box-sizing: border-box; }
+.layout-1 .recent-excerpt {
+  width: 33%;
+  float: left;
+  padding: 1em;
+  box-sizing: border-box; }
+.layout-1 .hero-section {
+  position: relative; }
+  .layout-1 .hero-section .header-image {
+    opacity: .8; }
+  .layout-1 .hero-section .custom-page-title {
+    position: absolute;
+    bottom: 39%;
+    left: 43%;
+    color: #fff; }
+
+/*# sourceMappingURL=page_layouts.css.map */

@@ -1,0 +1,24 @@
+/**
+ * Page Layouts
+ * http://wordpress.org/plugins
+ *
+ * Copyright (c) 2015 Bobby Bryant
+ * Licensed under the GPLv2+ license.
+ */
+#select-page-layout .layout-img {
+  width: 100px; }
+#select-page-layout label > input {
+  /* HIDE RADIO */
+  visibility: hidden;
+  /* Makes input not-clickable */
+  position: absolute;
+  /* Remove input from document flow */ }
+#select-page-layout label > input + img {
+  /* IMAGE STYLES */
+  cursor: pointer;
+  border: 2px solid transparent; }
+#select-page-layout label > input:checked + img {
+  /* (RADIO CHECKED) IMAGE STYLES */
+  border: 2px solid #00a0d2; }
+
+/*# sourceMappingURL=page_layouts-admin.css.map */

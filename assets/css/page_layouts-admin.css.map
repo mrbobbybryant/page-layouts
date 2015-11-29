@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": ";;;;;;;AASE,+BAAY;EACR,KAAK,EAAE,KAAK;AAGhB,iCAAa;;EACX,UAAU,EAAE,MAAM;;EAClB,QAAQ,EAAE,QAAQ;;AAEpB,uCAAmB;;EACjB,MAAM,EAAC,OAAO;EACd,MAAM,EAAC,qBAAqB;AAE9B,+CAA2B;;EACzB,MAAM,EAAC,iBAAiB",
+"sources": ["sass/page_layouts-admin.scss"],
+"names": [],
+"file": "page_layouts-admin.css"
+}

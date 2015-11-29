@@ -1,0 +1,38 @@
+.layout-1 {
+
+  .hero-section {
+    img {
+      height: 300px;
+    }
+
+  }
+  .featured-excerpt {
+    width: 48%;
+    float: left;
+    margin: 0 0 1em .5em;
+    height: 350px;
+    padding: 1em;
+    box-sizing: border-box;
+  }
+
+  .recent-excerpt {
+    width: 33%;
+    float: left;
+    padding: 1em;
+    box-sizing: border-box;
+  }
+
+  .hero-section {
+    position: relative;
+    .header-image {
+      opacity: .8;
+    }
+
+    .custom-page-title {
+      position: absolute;
+      bottom: 39%;
+      left: 43%;
+      color: #fff;
+    }
+  }
+}
